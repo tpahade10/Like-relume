@@ -1,4 +1,5 @@
 import { Navbar } from "@/components/Navbar";
+import { FloatingToolbar } from "@/components/FloatingToolbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ArrowRight, Zap, Shield, Globe, Code2, Cpu, Layers } from "lucide-react";
@@ -118,7 +119,7 @@ export default function Home() {
       </section>
       
       {/* Footer */}
-      <footer className="border-t py-12 md:py-16 bg-muted/20">
+      <footer className="border-t py-12 md:py-16 bg-muted/20 mb-24">
         <div className="container grid grid-cols-2 md:grid-cols-4 gap-8 px-4">
           <div className="col-span-2 md:col-span-1">
             <span className="font-bold text-lg">Acme Corp</span>
@@ -152,6 +153,7 @@ export default function Home() {
           </div>
         </div>
       </footer>
+      <FloatingToolbar />
     </div>
   );
 }
