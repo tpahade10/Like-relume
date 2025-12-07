@@ -125,41 +125,6 @@ export const PricingVariant1 = () => (
 // --- NEW FOUNDATION COMPONENTS ---
 
 // Layout
-export const ContainerComponent = () => (
-  <div className="container mx-auto px-4 py-8 border-2 border-dashed border-primary/20 bg-primary/5 min-h-[100px] rounded-lg flex items-center justify-center">
-    <span className="text-muted-foreground text-sm font-medium">Container Area</span>
-  </div>
-);
-
-export const SectionComponent = () => (
-  <section className="w-full py-12 px-4 border-y border-dashed border-muted bg-muted/10 flex items-center justify-center">
-    <span className="text-muted-foreground text-sm font-medium">Section Area</span>
-  </section>
-);
-
-export const Grid2ColComponent = () => (
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
-    <div className="bg-muted h-32 rounded-lg flex items-center justify-center text-muted-foreground">Col 1</div>
-    <div className="bg-muted h-32 rounded-lg flex items-center justify-center text-muted-foreground">Col 2</div>
-  </div>
-);
-
-export const Grid3ColComponent = () => (
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
-    <div className="bg-muted h-32 rounded-lg flex items-center justify-center text-muted-foreground">Col 1</div>
-    <div className="bg-muted h-32 rounded-lg flex items-center justify-center text-muted-foreground">Col 2</div>
-    <div className="bg-muted h-32 rounded-lg flex items-center justify-center text-muted-foreground">Col 3</div>
-  </div>
-);
-
-export const FlexboxComponent = () => (
-  <div className="flex flex-wrap gap-4 p-4 items-center justify-center border border-dashed rounded-lg">
-    <div className="w-20 h-20 bg-primary/20 rounded-md"></div>
-    <div className="w-20 h-20 bg-primary/40 rounded-md"></div>
-    <div className="w-20 h-20 bg-primary/60 rounded-md"></div>
-  </div>
-);
-
 export const StackVerticalComponent = () => (
   <div className="flex flex-col gap-4 p-4 max-w-xs mx-auto border border-dashed rounded-lg">
     <div className="h-12 bg-muted rounded-md w-full"></div>
@@ -207,14 +172,6 @@ export const ButtonComponent = () => (
   </div>
 );
 
-export const DividerComponent = () => (
-  <div className="py-8 px-4 flex items-center gap-4">
-    <div className="h-px bg-border flex-1"></div>
-    <span className="text-xs text-muted-foreground font-medium uppercase">Or</span>
-    <div className="h-px bg-border flex-1"></div>
-  </div>
-);
-
 export const ImageComponent = () => (
   <div className="p-4 flex justify-center">
     <div className="relative aspect-video w-full max-w-2xl bg-muted rounded-xl overflow-hidden flex items-center justify-center border">
@@ -239,11 +196,6 @@ export interface SectionComponent {
 
 export const AVAILABLE_SECTIONS: SectionComponent[] = [
   // Foundation - Layout
-  { id: 'container', type: 'layout', name: 'Container', component: ContainerComponent },
-  { id: 'section', type: 'layout', name: 'Section', component: SectionComponent },
-  { id: 'grid-2', type: 'layout', name: 'Grid (2 Col)', component: Grid2ColComponent },
-  { id: 'grid-3', type: 'layout', name: 'Grid (3 Col)', component: Grid3ColComponent },
-  { id: 'flexbox', type: 'layout', name: 'Flex Container', component: FlexboxComponent },
   { id: 'stack-v', type: 'layout', name: 'Vertical Stack', component: StackVerticalComponent },
   { id: 'spacer', type: 'layout', name: 'Spacer', component: SpacerComponent },
 
@@ -254,7 +206,6 @@ export const AVAILABLE_SECTIONS: SectionComponent[] = [
 
   // Foundation - Elements
   { id: 'button-group', type: 'elements', name: 'Button Group', component: ButtonComponent },
-  { id: 'divider', type: 'elements', name: 'Divider', component: DividerComponent },
   { id: 'image-placeholder', type: 'elements', name: 'Image', component: ImageComponent },
 
   // Navigation
