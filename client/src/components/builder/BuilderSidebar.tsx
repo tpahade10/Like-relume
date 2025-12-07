@@ -11,7 +11,10 @@ import {
   Layout, 
   Box, 
   MousePointer2, 
-  Menu
+  Menu,
+  Users,
+  CreditCard,
+  CreditCard as CardIcon
 } from "lucide-react";
 import { useState } from "react";
 
@@ -22,14 +25,10 @@ interface BuilderSidebarProps {
 
 const CATEGORIES: { id: SectionType | 'all'; label: string; icon: React.ElementType }[] = [
   { id: 'all', label: 'All', icon: LayoutTemplate },
-  { id: 'layout', label: 'Layout', icon: Layout },
-  { id: 'typography', label: 'Typography', icon: Type },
-  { id: 'elements', label: 'Elements', icon: MousePointer2 },
-  { id: 'header', label: 'Headers', icon: Menu },
   { id: 'hero', label: 'Hero', icon: Image },
-  { id: 'features', label: 'Features', icon: Box },
+  { id: 'social-proof', label: 'Social Proof', icon: Users },
   { id: 'pricing', label: 'Pricing', icon: DollarSign },
-  { id: 'footer', label: 'Footer', icon: Info },
+  { id: 'cards', label: 'Cards', icon: CardIcon },
 ];
 
 export function BuilderSidebar({ onAddSection, onThemeSelect }: BuilderSidebarProps) {
