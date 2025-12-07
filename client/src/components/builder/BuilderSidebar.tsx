@@ -2,7 +2,17 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { AVAILABLE_SECTIONS, SectionType, SectionComponent } from "./sections";
 import { PRESET_THEMES } from "@/lib/themes";
-import { LayoutTemplate, Type, Image, DollarSign, Phone, Info } from "lucide-react";
+import { 
+  LayoutTemplate, 
+  Type, 
+  Image, 
+  DollarSign, 
+  Info, 
+  Layout, 
+  Box, 
+  MousePointer2, 
+  Menu
+} from "lucide-react";
 import { useState } from "react";
 
 interface BuilderSidebarProps {
@@ -10,10 +20,14 @@ interface BuilderSidebarProps {
   onThemeSelect: (themeId: string) => void;
 }
 
-const CATEGORIES: { id: SectionType; label: string; icon: React.ElementType }[] = [
-  { id: 'header', label: 'Headers', icon: LayoutTemplate },
+const CATEGORIES: { id: SectionType | 'all'; label: string; icon: React.ElementType }[] = [
+  { id: 'all', label: 'All', icon: LayoutTemplate },
+  { id: 'layout', label: 'Layout', icon: Layout },
+  { id: 'typography', label: 'Typography', icon: Type },
+  { id: 'elements', label: 'Elements', icon: MousePointer2 },
+  { id: 'header', label: 'Headers', icon: Menu },
   { id: 'hero', label: 'Hero', icon: Image },
-  { id: 'features', label: 'Features', icon: Type },
+  { id: 'features', label: 'Features', icon: Box },
   { id: 'pricing', label: 'Pricing', icon: DollarSign },
   { id: 'footer', label: 'Footer', icon: Info },
 ];
@@ -60,27 +74,16 @@ export function BuilderSidebar({ onAddSection, onThemeSelect }: BuilderSidebarPr
 
       <div className="flex-1 overflow-hidden flex">
         {/* Category Rail */}
-        <div className="w-14 border-r bg-muted/10 flex flex-col items-center py-4 gap-4 shrink-0">
-          <button
-             onClick={() => setSelectedCategory('all')}
-             className={cn(
-               "p-2 rounded-lg transition-colors",
-               selectedCategory === 'all' ? "bg-primary/10 text-primary" : "hover:bg-muted text-muted-foreground"
-             )}
-             title="All"
-          >
-            <LayoutTemplate className="h-5 w-5" />
-          </button>
-          
-          <div className="w-8 h-px bg-border my-1" />
-
+        <div className="w-16 border-r bg-muted/10 flex flex-col items-center py-4 gap-2 shrink-0 overflow-y-auto scrollbar-hide">
           {CATEGORIES.map((cat) => (
             <button
               key={cat.id}
-              onClick={() => setSelectedCategory(cat.id)}
+              onClick={() => setSelectedCategory(cat.id as SectionType | 'all')}
               className={cn(
-                "p-2 rounded-lg transition-colors",
-                selectedCategory === cat.id ? "bg-primary/10 text-primary" : "hover:bg-muted text-muted-foreground"
+                "p-3 rounded-xl transition-all flex flex-col items-center gap-1 w-12 h-12 justify-center",
+                selectedCategory === cat.id 
+                  ? "bg-primary text-primary-foreground shadow-md scale-105" 
+                  : "hover:bg-muted text-muted-foreground hover:text-foreground"
               )}
               title={cat.label}
             >
@@ -93,6 +96,7 @@ export function BuilderSidebar({ onAddSection, onThemeSelect }: BuilderSidebarPr
         <ScrollArea className="flex-1">
           <div className="p-4 space-y-6">
             {CATEGORIES.map((category) => {
+              if (category.id === 'all') return null; // Don't show 'All' as a section title
               if (selectedCategory !== 'all' && selectedCategory !== category.id) return null;
               
               const sections = AVAILABLE_SECTIONS.filter(s => s.type === category.id);
@@ -100,7 +104,9 @@ export function BuilderSidebar({ onAddSection, onThemeSelect }: BuilderSidebarPr
 
               return (
                 <div key={category.id} className="space-y-3">
-                  <h3 className="text-xs font-medium text-muted-foreground pl-1">{category.label}</h3>
+                  <h3 className="text-xs font-medium text-muted-foreground pl-1 sticky top-0 bg-background/95 backdrop-blur py-2 z-10 border-b">
+                    {category.label}
+                  </h3>
                   <div className="grid gap-3">
                     {sections.map((section) => (
                       <button
@@ -109,11 +115,11 @@ export function BuilderSidebar({ onAddSection, onThemeSelect }: BuilderSidebarPr
                         className="group relative w-full aspect-[3/2] rounded-lg border bg-muted/20 hover:border-primary transition-all hover:shadow-sm overflow-hidden text-left"
                       >
                          {/* Preview skeleton */}
-                        <div className="absolute inset-0 p-2 opacity-50 group-hover:opacity-100 transition-opacity">
-                          <div className="w-full h-full bg-background rounded border shadow-sm p-2 flex flex-col gap-1 scale-[0.8] origin-top-left">
-                            <div className="h-2 w-1/3 bg-muted rounded-sm" />
-                            <div className="h-2 w-2/3 bg-muted/50 rounded-sm" />
-                            <div className="mt-auto h-4 w-full bg-muted/20 rounded-sm" />
+                        <div className="absolute inset-0 p-2 opacity-50 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <div className="w-full h-full bg-background rounded border shadow-sm p-2 flex flex-col gap-1 scale-[0.9] origin-center items-center justify-center">
+                            <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-widest text-center px-2">
+                              {section.name}
+                            </span>
                           </div>
                         </div>
                         <div className="absolute bottom-0 left-0 right-0 p-2 bg-background/80 backdrop-blur-sm border-t text-[10px] font-medium truncate">

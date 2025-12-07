@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Check, Menu, X } from "lucide-react";
+import { ArrowRight, Check, Menu, X, Layout, Type, Image as ImageIcon, Box, List, Link as LinkIcon, Minus, Columns, Divide, Square } from "lucide-react";
 import { Link } from "wouter";
+
+// --- EXISTING COMPONENTS ---
 
 export const HeaderVariant1 = () => (
   <header className="w-full border-b bg-background/95 backdrop-blur">
@@ -120,20 +122,152 @@ export const PricingVariant1 = () => (
   </section>
 );
 
-export type SectionType = 'header' | 'hero' | 'features' | 'pricing' | 'footer';
+// --- NEW FOUNDATION COMPONENTS ---
+
+// Layout
+export const ContainerComponent = () => (
+  <div className="container mx-auto px-4 py-8 border-2 border-dashed border-primary/20 bg-primary/5 min-h-[100px] rounded-lg flex items-center justify-center">
+    <span className="text-muted-foreground text-sm font-medium">Container Area</span>
+  </div>
+);
+
+export const SectionComponent = () => (
+  <section className="w-full py-12 px-4 border-y border-dashed border-muted bg-muted/10 flex items-center justify-center">
+    <span className="text-muted-foreground text-sm font-medium">Section Area</span>
+  </section>
+);
+
+export const Grid2ColComponent = () => (
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+    <div className="bg-muted h-32 rounded-lg flex items-center justify-center text-muted-foreground">Col 1</div>
+    <div className="bg-muted h-32 rounded-lg flex items-center justify-center text-muted-foreground">Col 2</div>
+  </div>
+);
+
+export const Grid3ColComponent = () => (
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+    <div className="bg-muted h-32 rounded-lg flex items-center justify-center text-muted-foreground">Col 1</div>
+    <div className="bg-muted h-32 rounded-lg flex items-center justify-center text-muted-foreground">Col 2</div>
+    <div className="bg-muted h-32 rounded-lg flex items-center justify-center text-muted-foreground">Col 3</div>
+  </div>
+);
+
+export const FlexboxComponent = () => (
+  <div className="flex flex-wrap gap-4 p-4 items-center justify-center border border-dashed rounded-lg">
+    <div className="w-20 h-20 bg-primary/20 rounded-md"></div>
+    <div className="w-20 h-20 bg-primary/40 rounded-md"></div>
+    <div className="w-20 h-20 bg-primary/60 rounded-md"></div>
+  </div>
+);
+
+export const StackVerticalComponent = () => (
+  <div className="flex flex-col gap-4 p-4 max-w-xs mx-auto border border-dashed rounded-lg">
+    <div className="h-12 bg-muted rounded-md w-full"></div>
+    <div className="h-12 bg-muted rounded-md w-full"></div>
+    <div className="h-12 bg-muted rounded-md w-full"></div>
+  </div>
+);
+
+export const SpacerComponent = () => (
+  <div className="w-full h-16 bg-transparent border-y border-dashed border-muted/50 flex items-center justify-center">
+    <span className="text-xs text-muted-foreground uppercase tracking-widest">Spacer</span>
+  </div>
+);
+
+// Typography
+export const HeadingComponent = () => (
+  <div className="p-4 text-center">
+    <h2 className="text-3xl font-bold tracking-tight">Heading Component</h2>
+  </div>
+);
+
+export const ParagraphComponent = () => (
+  <div className="p-4 max-w-prose mx-auto">
+    <p className="leading-7 text-muted-foreground">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    </p>
+  </div>
+);
+
+export const BlockquoteComponent = () => (
+  <div className="p-4 max-w-2xl mx-auto">
+    <blockquote className="border-l-4 border-primary pl-6 italic text-muted-foreground">
+      "Design is not just what it looks like and feels like. Design is how it works."
+    </blockquote>
+  </div>
+);
+
+// Basic Elements
+export const ButtonComponent = () => (
+  <div className="p-4 flex gap-4 justify-center items-center flex-wrap">
+    <Button>Primary</Button>
+    <Button variant="secondary">Secondary</Button>
+    <Button variant="outline">Outline</Button>
+    <Button variant="ghost">Ghost</Button>
+  </div>
+);
+
+export const DividerComponent = () => (
+  <div className="py-8 px-4 flex items-center gap-4">
+    <div className="h-px bg-border flex-1"></div>
+    <span className="text-xs text-muted-foreground font-medium uppercase">Or</span>
+    <div className="h-px bg-border flex-1"></div>
+  </div>
+);
+
+export const ImageComponent = () => (
+  <div className="p-4 flex justify-center">
+    <div className="relative aspect-video w-full max-w-2xl bg-muted rounded-xl overflow-hidden flex items-center justify-center border">
+      <ImageIcon className="h-12 w-12 text-muted-foreground/50" />
+    </div>
+  </div>
+);
+
+// --- TYPES & EXPORT ---
+
+export type SectionType = 
+  | 'layout' | 'typography' | 'elements' 
+  | 'header' | 'hero' | 'features' | 'pricing' | 'footer' | 'navigation';
 
 export interface SectionComponent {
   id: string;
   type: SectionType;
   name: string;
   component: React.ComponentType;
+  category?: string;
 }
 
 export const AVAILABLE_SECTIONS: SectionComponent[] = [
+  // Foundation - Layout
+  { id: 'container', type: 'layout', name: 'Container', component: ContainerComponent },
+  { id: 'section', type: 'layout', name: 'Section', component: SectionComponent },
+  { id: 'grid-2', type: 'layout', name: 'Grid (2 Col)', component: Grid2ColComponent },
+  { id: 'grid-3', type: 'layout', name: 'Grid (3 Col)', component: Grid3ColComponent },
+  { id: 'flexbox', type: 'layout', name: 'Flex Container', component: FlexboxComponent },
+  { id: 'stack-v', type: 'layout', name: 'Vertical Stack', component: StackVerticalComponent },
+  { id: 'spacer', type: 'layout', name: 'Spacer', component: SpacerComponent },
+
+  // Foundation - Typography
+  { id: 'heading', type: 'typography', name: 'Heading', component: HeadingComponent },
+  { id: 'paragraph', type: 'typography', name: 'Paragraph', component: ParagraphComponent },
+  { id: 'blockquote', type: 'typography', name: 'Blockquote', component: BlockquoteComponent },
+
+  // Foundation - Elements
+  { id: 'button-group', type: 'elements', name: 'Button Group', component: ButtonComponent },
+  { id: 'divider', type: 'elements', name: 'Divider', component: DividerComponent },
+  { id: 'image-placeholder', type: 'elements', name: 'Image', component: ImageComponent },
+
+  // Navigation
   { id: 'header-1', type: 'header', name: 'Simple Header', component: HeaderVariant1 },
   { id: 'header-2', type: 'header', name: 'Dark Header', component: HeaderVariant2 },
+  
+  // Hero
   { id: 'hero-1', type: 'hero', name: 'Centered Hero', component: HeroVariant1 },
   { id: 'hero-2', type: 'hero', name: 'Split Hero', component: HeroVariant2 },
+  
+  // Features
   { id: 'features-1', type: 'features', name: '3-Col Features', component: FeaturesVariant1 },
+  
+  // Pricing
   { id: 'pricing-1', type: 'pricing', name: 'Simple Pricing', component: PricingVariant1 },
 ];
