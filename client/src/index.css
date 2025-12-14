@@ -53,6 +53,16 @@
   --radius: 0.5rem;
 }
 
+.marquee {
+  animation: marquee-x 20s linear infinite;
+  will-change: transform;
+}
+
+@keyframes marquee-x {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 .dark {
   --background: 0 0% 3.9%;
   --foreground: 0 0% 98%;

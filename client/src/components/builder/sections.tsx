@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import {
   Accordion,
@@ -33,28 +33,237 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import ShowCodeModal from "@/components/ui/ShowCodeModal";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
+export const NavBarBasic = () => (
+  <section className="border-b bg-background">
+    <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+      <div className="flex items-center gap-2">
+        <div className="h-6 w-6 bg-primary rounded" />
+        <div className="font-semibold">Brand</div>
+      </div>
+      <div className="hidden md:flex items-center gap-6 text-sm">
+        <Link href="#features">Features</Link>
+        <Link href="#pricing">Pricing</Link>
+        <Link href="#faq">FAQ</Link>
+      </div>
+      <div className="flex items-center gap-2">
+        <Button variant="ghost">Sign in</Button>
+        <Button>Get Started</Button>
+      </div>
+    </div>
+  </section>
+);
+
+export const HeroSplitCTA = () => (
+  <section className="py-24 container px-4">
+    <div className="grid md:grid-cols-2 gap-12 items-center">
+      <div className="space-y-6">
+        <h1 className="text-5xl md:text-6xl font-bold tracking-tight">Build fast, launch faster</h1>
+        <p className="text-lg text-muted-foreground">Design-to-code workflow with AI-assisted content generation.</p>
+        <div className="space-y-3">
+          <Button className="w-48">Start Free</Button>
+          <Button variant="outline" className="w-48">Learn More</Button>
+        </div>
+      </div>
+      <div className="relative">
+        <div className="aspect-video bg-muted rounded-xl" />
+      </div>
+    </div>
+  </section>
+);
+
+function TypedText({ words }: { words: string[] }) {
+  const [index, setIndex] = useState(0);
+  const [text, setText] = useState("");
+  const [phase, setPhase] = useState<"typing" | "vanish">("typing");
+  useEffect(() => {
+    if (phase === "typing") {
+      const current = words[index % words.length];
+      let i = 0;
+      const interval = setInterval(() => {
+        i++;
+        setText(current.slice(0, i));
+        if (i >= current.length) {
+          clearInterval(interval);
+          setTimeout(() => setPhase("vanish"), 1000);
+        }
+      }, 60);
+      return () => clearInterval(interval);
+    } else {
+      const timeout = setTimeout(() => {
+        setText("");
+        setIndex((i) => i + 1);
+        setPhase("typing");
+      }, 600);
+      return () => clearTimeout(timeout);
+    }
+  }, [index, phase, words]);
+  return <span className={cn("inline-block", phase === "vanish" ? "opacity-0 transition-opacity" : "opacity-100")}>{text}</span>;
+}
+
+export const HeroCenteredTyping = () => (
+  <section className="py-32 text-center">
+    <div className="container px-4">
+      <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
+        <TypedText words={["Design.", "Build.", "Ship."]} />
+      </h1>
+      <p className="mt-6 text-xl text-muted-foreground max-w-2xl mx-auto">Create modern sites with AI content and ready-made sections.</p>
+      <div className="mt-8 flex gap-4 justify-center">
+        <Button size="lg">Get Started</Button>
+        <Button size="lg" variant="outline">Preview</Button>
+      </div>
+    </div>
+  </section>
+);
+
+export const LogoCarouselOneLine = () => (
+  <section className="py-12">
+    <div className="container px-4">
+      <div className="overflow-hidden">
+        <div className="flex gap-8 marquee">
+          {["ACME","Globex","Umbrella","Soylent","Initech","Stark","Wayne"].map((name,i)=> (
+            <div key={i} className="h-10 w-32 bg-foreground/10 rounded flex items-center justify-center">{name}</div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+export const LogoCarouselTwoLines = () => (
+  <section className="py-12">
+    <div className="container px-4 grid gap-6">
+      <div className="overflow-hidden">
+        <div className="flex gap-8 marquee">
+          {[1,2,3,4,5,6,7].map((i)=> (
+            <div key={`a-${i}`} className="h-10 w-32 bg-foreground/10 rounded flex items-center justify-center">Logo {i}</div>
+          ))}
+        </div>
+      </div>
+      <div className="overflow-hidden">
+        <div className="flex gap-8 marquee">
+          {[1,2,3,4,5,6,7].map((i)=> (
+            <div key={`b-${i}`} className="h-10 w-32 bg-foreground/10 rounded flex items-center justify-center">Logo {i+7}</div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+export const ImageCentered = () => (
+  <section className="py-20 container px-4">
+    <div className="mx-auto max-w-4xl">
+      <div className="aspect-video bg-muted rounded-xl" />
+    </div>
+  </section>
+);
+
+export const VideoCentered = () => (
+  <section className="py-20 container px-4">
+    <div className="mx-auto max-w-4xl">
+      <video className="w-full rounded-xl border" controls>
+        <source src="" type="video/mp4" />
+      </video>
+    </div>
+  </section>
+);
+
+export const TweetsGrid = () => (
+  <section className="py-20 container px-4">
+    <div className="grid md:grid-cols-3 gap-6">
+      {[
+        "Love the speed!",
+        "The builder is incredibly flexible.",
+        "AI copy saves hours.",
+        "Perfect for hackathons.",
+        "Minimal setup, big results.",
+        "Best launch week ever."
+      ].map((t,i)=> (
+        <Card key={i}>
+          <CardContent className="p-6">
+            <p className="text-sm">{t}</p>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  </section>
+);
+
+export const FAQSimple = () => (
+  <section className="py-20 container px-4 max-w-3xl mx-auto">
+    <Accordion type="single" collapsible>
+      <AccordionItem value="q1">
+        <AccordionTrigger>Is it free to start?</AccordionTrigger>
+        <AccordionContent>Yes, start free and upgrade anytime.</AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="q2">
+        <AccordionTrigger>Can I export code?</AccordionTrigger>
+        <AccordionContent>Copy Vite or Next.js templates from Get Code.</AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="q3">
+        <AccordionTrigger>Does AI write content?</AccordionTrigger>
+        <AccordionContent>Use the AI bar to generate and edit text.</AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  </section>
+);
+
+export const ContactSimple = () => (
+  <section className="py-20 container px-4 max-w-2xl mx-auto">
+    <div className="space-y-4">
+      <div className="grid md:grid-cols-2 gap-4">
+        <Input placeholder="Name" />
+        <Input placeholder="Email" type="email" />
+      </div>
+      <Input placeholder="Subject" />
+      <Textarea placeholder="Message" className="h-32" />
+      <Button className="w-full">Send</Button>
+    </div>
+  </section>
+);
 
 
 // --- HERO COMPONENTS ---
 
-export const HeroVideo = () => (
+export const HeroVideo = () => {
+  const code = `export const HeroVideo = () => (
   <section className="relative h-[600px] flex items-center justify-center overflow-hidden">
     <div className="absolute inset-0 bg-black/60 z-10" />
     <div className="absolute inset-0 bg-gradient-to-r from-blue-900/40 to-purple-900/40 z-0 animate-pulse" />
     <div className="container relative z-20 text-center text-white px-4">
-      <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
-        Cinematic Experience
-      </h1>
-      <p className="text-xl md:text-2xl text-white/80 max-w-2xl mx-auto mb-8">
-        Immersive video backgrounds that capture attention immediately.
-      </p>
+      <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">Cinematic Experience</h1>
+      <p className="text-xl md:text-2xl text-white/80 max-w-2xl mx-auto mb-8">Immersive video backgrounds that capture attention immediately.</p>
       <div className="flex gap-4 justify-center">
         <Button size="lg" className="bg-white text-black hover:bg-white/90">Watch Demo</Button>
         <Button size="lg" variant="outline" className="text-white border-white hover:bg-white/10">Learn More</Button>
       </div>
     </div>
   </section>
-);
+)`;
+  return (
+    <>
+      <section className="relative h-[600px] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-black/60 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/40 to-purple-900/40 z-0 animate-pulse" />
+        <div className="container relative z-20 text-center text-white px-4">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">Cinematic Experience</h1>
+          <p className="text-xl md:text-2xl text-white/80 max-w-2xl mx-auto mb-8">Immersive video backgrounds that capture attention immediately.</p>
+          <div className="flex gap-4 justify-center">
+            <Button size="lg" className="bg-white text-black hover:bg-white/90">Watch Demo</Button>
+            <Button size="lg" variant="outline" className="text-white border-white hover:bg-white/10">Learn More</Button>
+          </div>
+        </div>
+      </section>
+      <div className="mt-4">
+        <ShowCodeModal code={code} />
+      </div>
+    </>
+  );
+};
 
 export const HeroAnimated = () => (
   <section className="py-32 px-4 relative overflow-hidden bg-background">
@@ -440,6 +649,151 @@ export const TableSortable = () => (
     </div>
   </div>
 );
+export function NavbarGradient({ brand = "brand", links = [] }) {
+return (
+<header className="sticky top-0 z-50 bg-gradient-to-r from-fuchsia-500/90 to-indigo-500/90 backdrop-blur">
+<nav className="mx-auto max-w-7xl px-6 py-3 flex items-center justify-between text-white">
+<div className="font-semibold tracking-tight">{brand}</div>
+<div className="hidden md:flex items-center gap-6 text-sm">
+{links.map((l) => (
+<a   className="opacity-90 hover:opacity-100">MAMA</a>
+))}
+</div>
+<button className="md:hidden"> <Menu /> </button>
+</nav>
+</header>
+);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4) Dropdown Docs Navbar */
+/* -------------------------------------------------------------------------- */
+export function NavbarDocs({ brand = "Docs" }) {
+const [open, setOpen] = useState(false);
+return (
+<header className="sticky top-0 z-50 bg-white border-b">
+<nav className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
+<span className="font-semibold">{brand}</span>
+<div className="relative">
+<button onClick={() => setOpen(!open)} className="flex items-center gap-1 text-sm">
+Resources <ChevronDown size={16} />
+</button>
+{open && (
+<div className="absolute right-0 mt-2 w-48 rounded-xl border bg-white shadow-lg p-2 text-sm">
+<a className="block px-3 py-2 hover:bg-neutral-100 rounded" href="#">Docs</a>
+<a className="block px-3 py-2 hover:bg-neutral-100 rounded" href="#">API</a>
+<a className="block px-3 py-2 hover:bg-neutral-100 rounded" href="#">Changelog</a>
+</div>
+)}
+</div>
+</nav>
+</header>
+);
+}
+
+
+/* -------------------------------------------------------------------------- */
+/* 5) App Navbar with Search (Dashboard) */
+/* -------------------------------------------------------------------------- */
+export function NavbarApp({ brand = "zen" }) {
+return (
+<header className="sticky top-0 z-50 bg-black text-white">
+<nav className="mx-auto max-w-7xl px-6 py-3 flex items-center justify-between">
+<div className="flex items-center gap-3">
+<div className="h-7 w-7 rounded bg-blue-500" />
+<span className="font-medium">{brand}</span>
+</div>
+<div className="hidden md:flex items-center gap-2 bg-white/10 rounded-lg px-3 py-1">
+<Search size={14} />
+<input placeholder="Search" className="bg-transparent outline-none text-sm" />
+</div>
+</nav>
+</header>
+);
+}
+
+
+/* -------------------------------------------------------------------------- */
+
+const logos = [
+  { src: "https://logo.svgcdn.com/logos/openai.svg", alt: "OpenAI" },
+  { src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/MIT_logo.svg", alt: "MIT" },
+  { src: "https://registry.npmmirror.com/@lobehub/icons-static-png/1.75.0/files/dark/meta-color.png", alt: "Meta" },
+  { src: "https://registry.npmmirror.com/@lobehub/icons-static-png/1.75.0/files/dark/google-color.png", alt: "Google" },
+];
+
+function TrustedBy() {
+  return (
+    <section className="py-12">
+      <p className="text-center mb-8 text-gray-600">
+        Trusted by <span className="font-bold">OpenAI, MIT, Google, Meta</span>
+      </p>
+      <div className="flex justify-center gap-10 flex-wrap">
+        {logos.map((logo) => (
+          <img key={logo.alt} src={logo.src} alt={logo.alt} className="h-10 grayscale opacity-60 hover:opacity-100" loading="lazy" />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// src/components/SingleMediaSection.tsx
+
+// type Props = {
+//   title?: string
+//   subtitle?: string
+//   mediaSrc: string
+//   type?: "image" | "video"
+// }
+
+// export default function SingleMediaSection({
+//   title = "See it in action",
+//   subtitle = "A quick look at how the product works",
+//   mediaSrc,
+//   type = "image",
+// }: Props) {
+//   return (
+//     <section className="w-full py-20">
+//       <div className="mx-auto max-w-6xl px-6">
+//         {/* Text */}
+//         <div className="mb-10 text-center">
+//           <h2 className="text-2xl md:text-3xl font-semibold">
+//             See it in action
+//           </h2>
+//           <p className="mt-3 text-muted-foreground">
+//             A quick look at how the product works
+//           </p>
+//         </div>
+
+//         {/* Media */}
+//         <div className="relative overflow-hidden rounded-2xl border bg-background shadow-xl">
+//           {type === "video" ? (
+//             <video
+//               src={mediaSrc}
+//               autoPlay
+//               loop
+//               muted
+//               playsInline
+//               className="w-full h-full object-cover"
+//             />
+//           ) : (
+//             <img
+//               src={mediaSrc}
+//               alt="Product preview"
+//               className="w-full h-full object-cover"
+//               loading="lazy"
+//             />
+//           )}
+
+//           {/* subtle glow */}
+//           <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-black/10 dark:ring-white/10" />
+//         </div>
+//       </div>
+//     </section>
+//   )
+// }
+
+
 
 
 // --- TYPES & EXPORT ---
@@ -447,7 +801,7 @@ export const TableSortable = () => (
 export type SectionType = 
   | 'layout' | 'typography' | 'elements' 
   | 'header' | 'hero' | 'features' | 'pricing' | 'footer' | 'navigation'
-  | 'social-proof' | 'cards' | 'data-display';
+  | 'social-proof' | 'cards' | 'data-display' | 'navbar' | 'trusted-by'| 'media' | 'theme';
 
 export interface SectionComponent {
   id: string;
@@ -458,6 +812,20 @@ export interface SectionComponent {
 }
 
 export const AVAILABLE_SECTIONS: SectionComponent[] = [
+
+  //navbar
+  { id: 'navbar-basic', type: 'navbar', name: '1. Navbar', component: NavBarBasic },
+  { id: 'navbar-docs', type: 'navbar', name: '2. Navbar Docs', component: NavbarDocs },
+  { id: 'navbar-app', type: 'navbar', name: '3. Navbar App', component: NavbarApp },
+  { id: 'navbar-gradient', type: 'navbar', name: '4. Navbar Gradient', component: NavbarGradient },
+
+  //trusted-by
+  { id: 'trusted-by', type: 'trusted-by', name: '1. Navbar', component: TrustedBy },
+  // media
+  { id: 'Media-Image', type: 'media', name: '1. Image', component: ImageCentered },
+  { id: 'Media-Video', type: 'media', name: 'Video', component: VideoCentered },
+  
+  
   // Hero
   { id: 'hero-video', type: 'hero', name: 'Hero - Video Background', component: HeroVideo },
   { id: 'hero-animated', type: 'hero', name: 'Hero - Animated Gradient', component: HeroAnimated },
@@ -477,7 +845,6 @@ export const AVAILABLE_SECTIONS: SectionComponent[] = [
   { id: 'pricing-faq', type: 'pricing', name: 'Pricing + FAQ', component: PricingFAQ },
 
   // Cards
-  { id: 'card-basic', type: 'cards', name: 'Basic Card', component: CardBasic },
   { id: 'card-product', type: 'cards', name: 'Product Card', component: CardProduct },
   { id: 'card-team', type: 'cards', name: 'Team Member Card', component: CardTeam },
   { id: 'card-3d', type: 'cards', name: '3D Card', component: Card3D },
