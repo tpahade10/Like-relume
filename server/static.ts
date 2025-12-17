@@ -7,27 +7,14 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export function serveStatic(app: Express) {
-  const distPath = path.resolve(__dirname, "../dist");  // Change from "public" to "../dist"
+  const distPath = path.resolve(__dirname, "public");
   if (!fs.existsSync(distPath)) {
     throw new Error(
       `Could not find the build directory: ${distPath}, make sure to build the client first`,
     );
   }
 
-  // Set MIME types for static files
-  app.use(express.static(distPath, {
-    setHeaders: (res, filePath) => {
-      if (filePath.endsWith(".js")) {
-        res.setHeader("Content-Type", "application/javascript");
-      } else if (filePath.endsWith(".mjs")) {
-        res.setHeader("Content-Type", "application/javascript");
-      } else if (filePath.endsWith(".css")) {
-        res.setHeader("Content-Type", "text/css");
-      } else if (filePath.endsWith(".wasm")) {
-        res.setHeader("Content-Type", "application/wasm");
-      }
-    },
-  }));
+  app.use(express.static(distPath));
   
   // Serve uploaded images
   const uploadsPath = path.resolve(__dirname, "../uploads");
