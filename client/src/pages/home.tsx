@@ -33,7 +33,7 @@ export default function Home() {
   const [codeDialogOpen, setCodeDialogOpen] = useState(false);
   const [codeFormat, setCodeFormat] = useState<"vite" | "nextjs">("vite");
   const [sitemapOpen, setSitemapOpen] = useState(false);
-  const themeStyle = {};
+  const [themeStyle, setThemeStyle] = useState<React.CSSProperties>({});
   const { toast } = useToast();
 
   const handleAddSection = (section: SectionComponent) => {
@@ -91,39 +91,40 @@ export default function Home() {
     const theme = PRESET_THEMES.find(t => t.id === themeId);
     if (!theme) return;
 
-    // Load Google Fonts if needed
+    // Load Google Fonts only once per href
     if (theme.googleFonts) {
-      const link = document.createElement('link');
-      link.href = `https://fonts.googleapis.com/css2?${theme.googleFonts}&display=swap`;
-      link.rel = 'stylesheet';
-      document.head.appendChild(link);
+      const href = `https://fonts.googleapis.com/css2?${theme.googleFonts}&display=swap`;
+      const existing = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
+        .some(l => (l as HTMLLinkElement).href === href);
+      if (!existing) {
+        const link = document.createElement('link');
+        link.href = href;
+        link.rel = 'stylesheet';
+        document.head.appendChild(link);
+      }
     }
-    
-    // Apply fonts to body
-    document.body.style.fontFamily = theme.fonts.sans;
 
-    // Set CSS variables for colors (converting to HSL for Tailwind)
-    const root = document.documentElement;
-    
-    // Helper to set variable
+    // Build scoped style for the internal canvas only
+    const vars: React.CSSProperties = {};
     const setVar = (name: string, hex: string) => {
-      root.style.setProperty(name, hexToHSL(hex));
+      (vars as any)[name] = hexToHSL(hex);
     };
 
     setVar('--background', theme.colors.background);
     setVar('--foreground', theme.colors.text);
     setVar('--primary', theme.colors.primary);
-    setVar('--primary-foreground', theme.colors.background); // Assuming light bg for primary text usually
+    (vars as any)['--primary-foreground'] = hexToHSL(theme.colors.background);
     setVar('--secondary', theme.colors.secondary);
-    setVar('--secondary-foreground', theme.colors.text);
+    (vars as any)['--secondary-foreground'] = hexToHSL(theme.colors.text);
     setVar('--muted', theme.colors.secondary);
-    setVar('--muted-foreground', theme.colors.text);
+    (vars as any)['--muted-foreground'] = hexToHSL(theme.colors.text);
     setVar('--accent', theme.colors.accent);
-    setVar('--accent-foreground', theme.colors.text);
-    
-    // Also update border to match text with some transparency or secondary
+    (vars as any)['--accent-foreground'] = hexToHSL(theme.colors.text);
     setVar('--border', theme.colors.secondary);
     setVar('--input', theme.colors.secondary);
+
+    vars.fontFamily = theme.fonts.sans;
+    setThemeStyle(vars);
   };
 
   const generateCode = () => {
@@ -418,6 +419,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         onMoveSection={handleMoveSection}
         aiModifications={aiModifications}
         onAIModification={handleAIModification}
+        themeStyle={themeStyle}
         // onThemeSelect={handleThemeSelect}
       />
       <div className="fixed bottom-6 right-6 left-96 flex items-center gap-2 z-50">
