@@ -19,6 +19,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { Sidebar } from "@/components/sidebar";
 
 export interface AIModifications {
   classes?: string;
@@ -345,6 +346,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <div className="h-screen w-screen flex flex-col bg-background overflow-hidden transition-colors duration-500">
       {/* Top Bar */}
+    <Sidebar />
+    
       <header className="h-14 border-b flex items-center justify-between px-4 bg-background shrink-0 z-10">
         <div className="flex items-center gap-4">
           <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center transition-colors duration-500">
@@ -422,16 +425,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         themeStyle={themeStyle}
         // onThemeSelect={handleThemeSelect}
       />
-      <div className="fixed bottom-6 right-6 left-96 flex items-center gap-2 z-50">
-        <Button variant="default" className="h-9" onClick={() => setCodeDialogOpen(true)}>
-          <Eye className="h-4 w-4 mr-2" />
-          Preview
-        </Button>
-        <Button variant="outline" className="h-9" onClick={() => setSitemapOpen(true)}>
-          Sitemap
-        </Button>
-      </div>
-
+      
       <Dialog open={sitemapOpen} onOpenChange={setSitemapOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
